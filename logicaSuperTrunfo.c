@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 int main () {
     /*
@@ -37,11 +38,23 @@ int main () {
     float super_poder_cidade_2; // O Super Poder da segunda carta
 
     // Variaveis da comparação entre os atributos das cartas 1 e 2
-    int escolha; // A escolha de 1 a 5 de qual atributo de comparação o usuário deseja
-    char resultado_comparacao[30]; // Resultado da comparação entre as cartas de acordo com o atributo escolhido
-    char atributo_selecionado[50]; // O atributo selecionado para fazer a comparação, para mostrar ao final para o usuário
-    char informacoes_carta_1[50]; // Informações da primeira carta e a quantidade do atributo selecionado da primeira carta para fazer a comparação, para mostrar ao final para o usuário
-    char informacoes_carta_2[50]; // Informações da segunda carta e a quantidade do atributo selecionado da segunda carta para fazer a comparação, para mostrar ao final para o usuário
+    int escolha1; // A escolha do primeiro atributo de comparação o usuário deseja
+    int escolha2; // A escolha do segundo atributo de comparação o usuário deseja
+
+    int resultado1; // O resultado da primeira comparação do primeiro atributo escolhido
+    int resultado2; // O resultado da segunda comparação do segundo atributo escolhido
+    char vencedor_atributo1[50]; // Guarda qual carta foi a vencedora na comparação no primeiro atributo
+    char vencedor_atributo2[50]; // Guarda qual carta foi a vencedora na comparação no segundo atributo
+
+    char resultado_comparacao[50]; // Resultado da comparação entre as cartas de acordo com o atributo escolhido
+
+    char atributo_selecionado1[50]; // O primeiro atributo selecionado para fazer a comparação, para mostrar ao final para o usuário
+    char atributo_selecionado2[50]; // O segundo atributo selecionado para fazer a comparação, para mostrar ao final para o usuário
+
+    char atributo_1_informacoes_carta_1[50]; // Informações da primeira carta e a quantidade do primeiro atributo selecionado da primeira carta para fazer a comparação com o segundo atributo, para mostrar ao final para o usuário
+    char atributo_1_informacoes_carta_2[50]; // Informações da segunda carta e a quantidade do primeiro atributo selecionado da segunda carta para fazer a comparação com o segundo atributo, para mostrar ao final para o usuário
+    char atributo_2_informacoes_carta_1[50]; // Informações da primeira carta e a quantidade do segundo atributo selecionado da primeira carta para fazer a comparação com o primeiro atributo, para mostrar ao final para o usuário
+    char atributo_2_informacoes_carta_2[50]; // Informações da segunda carta e a quantidade do segundo atributo selecionado da segunda carta para fazer a comparação com o primeiro atributo, para mostrar ao final para o usuário
 
     printf("Bem-vindo! Cadastre suas cartas do jogo Super Trunfo!\n");
     
@@ -49,13 +62,14 @@ int main () {
     printf("\nCadastre a primeira carta do jogo.\n");
     printf("---------------------------------------------------------------\n");
     printf("Escreva abaixo, primeiramente, o nome de um estado do Brasil, para a primeira carta:\n");
-    scanf("%s", &estado_cidade_1);
+    scanf("%s", estado_cidade_1);
 
     printf("\nEscreva abaixo, o código desta primeira carta (Ex.: A01, B03... Primeiro a letra, sendo A ou B, e depois um número de 01 a 04):\n");
-    scanf("%s", &codigo_carta_1);
+    scanf("%s", codigo_carta_1);
 
     printf("\nEscreva abaixo, o nome da cidade desta primeira carta, que pertence à %s:\n", estado_cidade_1);
-    scanf("%s", &nome_cidade_1);
+    // Foi colocado " %[^\n]" para ler os espaços assim podendo escrever cidades como "Rio de Janeiro"
+    scanf(" %[^\n]", nome_cidade_1);
 
     printf("\nEscreva abaixo, a população de %s:\n", nome_cidade_1);
     scanf("%u", &populacao_cidade_1);
@@ -95,13 +109,13 @@ int main () {
     printf("Agora, cadastre a segunda carta do jogo.\n");
     printf("---------------------------------------------------------------\n");
     printf("Escreva abaixo, primeiramente, o nome de um estado do Brasil, para a segunda carta:\n");
-    scanf("%s", &estado_cidade_2);
+    scanf("%s", estado_cidade_2);
 
     printf("\nEscreva abaixo, o código desta segunda carta (Ex.: A01, B03... Primeiro a letra, sendo A ou B, e depois um número de 01 a 04):\n");
-    scanf("%s", &codigo_carta_2);
+    scanf("%s", codigo_carta_2);
 
     printf("\nEscreva abaixo, o nome da cidade desta segunda carta, que pertence à %s:\n", estado_cidade_2);
-    scanf("%s", &nome_cidade_2);
+    scanf(" %[^\n]", nome_cidade_2);
 
     printf("\nEscreva abaixo, a população de %s:\n", nome_cidade_2);
     scanf("%u", &populacao_cidade_2);
@@ -200,137 +214,276 @@ int main () {
 
     // Agora o usuário vai escolher o atributo desejado para realizar as comparações entre as cartas
     printf("--------------------------------------------------------------------\n");
-    printf("COMPARAÇÃO ENTRE AS CARTAS\n");
+    printf("HORA DA COMPARAÇÃO ENTRE AS CARTAS\n");
+    printf("A comparação será com a escolha de 2 atributos para assim determinar o vencedor.\n");
     printf("--------------------------------------------------------------------\n\n");
 
     // Menu principal para escolha do atributo
-    printf("Escolha qual atributo deseja que haja a comparação: \n");
+    printf("Escolha o primeiro atributo que deseja para haver a comparação com o segundo: \n");
     printf("----------------------------------------\n");
     printf("[1] - POPULAÇÃO\n");
     printf("[2] - ÁREA\n");
     printf("[3] - PIB\n");
     printf("[4] - NÚMERO DE PONTOS TURÍSTICOS\n");
     printf("[5] - DENSIDADE DEMOGRÁFICA\n");
+    printf("[6] - SUPER PODER\n");
     printf("----------------------------------------\n");
-    printf("[DIGITE O NÚMERO DO ATRIBUTO QUE DESEJA] > ");
-    scanf("%d", &escolha);
+    printf("[DIGITE O NÚMERO DO PRIMEIRO ATRIBUTO QUE DESEJA] > ");
+    scanf("%d", &escolha1);
 
     // Usando switch-case para realizar a comparação de acordo com o atributo escolhido pelo usuário acima
-    switch (escolha)
+    switch (escolha1)
     {
         // Caso escolha POPULAÇÃO
         case 1:
-            // O método de comparação da população entre as cartas usando if-else
-            if (populacao_cidade_1 > populacao_cidade_2) {
-                /*
-                    Usando "strcpy" para pode definir o resultado na variavel do resultado,
-                    pois é usada para copiar o conteúdo de um texto (string),
-                    para uma variável do tipo array de caracteres.
-                    Assim, somente mostrando no final o resultado ao usuário
-                */
-                strcpy(resultado_comparacao, "CARTA 1 VENCEU!");
-            } else if (populacao_cidade_1 < populacao_cidade_2) {
-                strcpy(resultado_comparacao, "CARTA 2 VENCEU!");
-            } else {
-                strcpy(resultado_comparacao, "HOUVE UM EMPATE!");
-            }
+            // O método de comparação da população entre as cartas usando Operador Ternário
+            resultado1 = populacao_cidade_1 > populacao_cidade_2 ? 1 : 0;
+
+            // O método que vai mostrar para o usuário no final qual carta foi a vencedora neste primeiro atributo
+            resultado1 == 1 ? strcpy(vencedor_atributo1, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo1, "Carta 2 venceu neste atributo!");
 
             /*
                 Ao invés de colar o menuzinho de resultado em todos os cases,
                 salvamos em variaveis, aonde só vai formatar no final com o
                 resultado e as informações adicionais necessárias, otimizando
-                mais o código
+                mais o código, usando "strcpy" para pode definir o resultado na variavel do resultado,
+                pois é usada para copiar o conteúdo de um texto (string),
+                para uma variável do tipo array de caracteres.
+                Assim, somente mostrando no final o resultado ao usuário
             */
-            
-            strcpy(atributo_selecionado, "POPULAÇÃO");
+            strcpy(atributo_selecionado1, "POPULAÇÃO");
 
             /*
                 Usando "sprintf" para poder escrever na variavel uma string formatada,
                 pois ele serve como o printf, mas em vez de exibir o texto na tela, 
                 ele "imprime" o resultado formatado dentro do array de char, da
-                minha variavel
+                minha variavel, assim salvando a quantidade do atributo da carta
+                para mostrar no final
             */
-            sprintf(informacoes_carta_1, "CARTA 1 [%s] - %s: %u\n", codigo_carta_1, nome_cidade_1, populacao_cidade_1);
-            sprintf(informacoes_carta_2, "CARTA 2 [%s] - %s: %u\n", codigo_carta_2, nome_cidade_2, populacao_cidade_2);
+            sprintf(atributo_1_informacoes_carta_1, "CARTA 1 [%s] - %s: %u\n", codigo_carta_1, nome_cidade_1, populacao_cidade_1);
+            sprintf(atributo_1_informacoes_carta_2, "CARTA 2 [%s] - %s: %u\n", codigo_carta_2, nome_cidade_2, populacao_cidade_2);
             break;
         // Caso escolha ÁREA
         case 2:
-            // O método de comparação da área entre as cartas usando if-else
-            if (area_cidade_1 > area_cidade_2) {
-                strcpy(resultado_comparacao, "CARTA 1 VENCEU!");
-            } else if (area_cidade_1 < area_cidade_2) {
-                strcpy(resultado_comparacao, "CARTA 2 VENCEU!");
-            } else {
-                strcpy(resultado_comparacao, "HOUVE UM EMPATE!");
-            }
-            
-            // Salvando as informações nas variaveis
-            strcpy(atributo_selecionado, "ÁREA");
-            sprintf(informacoes_carta_1, "CARTA 1 [%s] - %s: %.2f KM²\n", codigo_carta_1, nome_cidade_1, area_cidade_1);
-            sprintf(informacoes_carta_2, "CARTA 2 [%s] - %s: %.2f KM²\n", codigo_carta_2, nome_cidade_2, area_cidade_2);
+            resultado1 = area_cidade_1 > area_cidade_2 ? 1 : 0;
+
+            resultado1 == 1 ? strcpy(vencedor_atributo1, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo1, "Carta 2 venceu neste atributo!");
+
+            strcpy(atributo_selecionado1, "ÁREA");
+
+            sprintf(atributo_1_informacoes_carta_1, "CARTA 1 [%s] - %s: %.2f KM²\n", codigo_carta_1, nome_cidade_1, area_cidade_1);
+            sprintf(atributo_1_informacoes_carta_2, "CARTA 2 [%s] - %s: %.2f KM²\n", codigo_carta_2, nome_cidade_2, area_cidade_2);
             break;
         // Caso escolha PIB
         case 3:
-            // O método de comparação do PIB entre as cartas usando if-else
-            if (pib_cidade_1 > pib_cidade_2) {
-                strcpy(resultado_comparacao, "CARTA 1 VENCEU!");
-            } else if (pib_cidade_1 < pib_cidade_2) {
-                strcpy(resultado_comparacao, "CARTA 2 VENCEU!");
-            } else {
-                strcpy(resultado_comparacao, "HOUVE UM EMPATE!");
-            }
+            resultado1 = pib_cidade_1 > pib_cidade_2 ? 1 : 0;
+
+            resultado1 == 1 ? strcpy(vencedor_atributo1, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo1, "Carta 2 venceu neste atributo!");
             
-            // Salvando as informações nas variaveis
-            strcpy(atributo_selecionado, "PIB");
-            sprintf(informacoes_carta_1, "CARTA 1 [%s] - %s: %.2f BILHÕES DE REAIS\n", codigo_carta_1, nome_cidade_1, pib_cidade_1);
-            sprintf(informacoes_carta_2, "CARTA 2 [%s] - %s: %.2f BILHÕES DE REAIS\n", codigo_carta_2, nome_cidade_2, pib_cidade_2);
+            strcpy(atributo_selecionado1, "PIB");
+
+            sprintf(atributo_1_informacoes_carta_1, "CARTA 1 [%s] - %s: %.2f BILHÕES DE REAIS\n", codigo_carta_1, nome_cidade_1, pib_cidade_1);
+            sprintf(atributo_1_informacoes_carta_2, "CARTA 2 [%s] - %s: %.2f BILHÕES DE REAIS\n", codigo_carta_2, nome_cidade_2, pib_cidade_2);
             break;
         // Caso escolha NÚMERO DE PONTOS TURÍSTCOS
         case 4:
-            // O método de comparação do número de pontos turísticos entre as cartas usando if-else
-            if (pontos_turisticos_cidade_1 > pontos_turisticos_cidade_2) {
-                strcpy(resultado_comparacao, "CARTA 1 VENCEU!");
-            } else if (pontos_turisticos_cidade_1 < pontos_turisticos_cidade_2) {
-                strcpy(resultado_comparacao, "CARTA 2 VENCEU!");
-            } else {
-                strcpy(resultado_comparacao, "HOUVE UM EMPATE!");
-            }
+            resultado1 = pontos_turisticos_cidade_1 > pontos_turisticos_cidade_2 ? 1 : 0;
+
+            resultado1 == 1 ? strcpy(vencedor_atributo1, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo1, "Carta 2 venceu neste atributo!");
             
-            // Salvando as informações nas variaveis
-            strcpy(atributo_selecionado, "NÚMERO DE PONTOS TURÍSTCOS");
-            sprintf(informacoes_carta_1, "CARTA 1 [%s] - %s: %d\n", codigo_carta_1, nome_cidade_1, pontos_turisticos_cidade_1);
-            sprintf(informacoes_carta_2, "CARTA 2 [%s] - %s: %d\n", codigo_carta_2, nome_cidade_2, pontos_turisticos_cidade_2);
+            strcpy(atributo_selecionado1, "NÚMERO DE PONTOS TURÍSTICOS");
+
+            sprintf(atributo_1_informacoes_carta_1, "CARTA 1 [%s] - %s: %d\n", codigo_carta_1, nome_cidade_1, pontos_turisticos_cidade_1);
+            sprintf(atributo_1_informacoes_carta_2, "CARTA 2 [%s] - %s: %d\n", codigo_carta_2, nome_cidade_2, pontos_turisticos_cidade_2);
             break;
         // Caso escolha DENSIDADE DEMOGRÁFICA
         case 5:
-            // O método de comparação da densidade demográfica entre as cartas usando if-else
-            if (densidade_populacional_cidade_1 < densidade_populacional_cidade_2) {
-                strcpy(resultado_comparacao, "CARTA 1 VENCEU!");
-            } else if (densidade_populacional_cidade_1 > densidade_populacional_cidade_2) {
-                strcpy(resultado_comparacao, "CARTA 2 VENCEU!");
-            } else {
-                strcpy(resultado_comparacao, "HOUVE UM EMPATE!");
-            }
+            resultado1 = densidade_populacional_cidade_1 < densidade_populacional_cidade_2 ? 1 : 0;
+
+            resultado1 == 1 ? strcpy(vencedor_atributo1, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo1, "Carta 2 venceu neste atributo!");
             
-            // Salvando as informações nas variaveis
-            strcpy(atributo_selecionado, "DENSIDADE DEMOGRÁFICA");
-            sprintf(informacoes_carta_1, "CARTA 1 [%s] - %s: %.2f HAB/KM²\n", codigo_carta_1, nome_cidade_1, densidade_populacional_cidade_1);
-            sprintf(informacoes_carta_2, "CARTA 2 [%s] - %s: %.2f HAB/KM²\n", codigo_carta_2, nome_cidade_2, densidade_populacional_cidade_2);
+            strcpy(atributo_selecionado1, "DENSIDADE DEMOGRÁFICA");
+
+            sprintf(atributo_1_informacoes_carta_1, "CARTA 1 [%s] - %s: %.2f HAB/KM²\n", codigo_carta_1, nome_cidade_1, densidade_populacional_cidade_1);
+            sprintf(atributo_1_informacoes_carta_2, "CARTA 2 [%s] - %s: %.2f HAB/KM²\n", codigo_carta_2, nome_cidade_2, densidade_populacional_cidade_2);
+            break;
+        // Caso escolha SUPER PODER
+        case 6:
+            resultado1 = super_poder_cidade_1 > super_poder_cidade_2 ? 1 : 0;
+
+            resultado1 == 1 ? strcpy(vencedor_atributo1, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo1, "Carta 2 venceu neste atributo!");
+
+            strcpy(atributo_selecionado1, "SUPER PODER");
+
+            sprintf(atributo_1_informacoes_carta_1, "CARTA 1 [%s] - %s: %f\n", codigo_carta_1, nome_cidade_1, super_poder_cidade_1);
+            sprintf(atributo_1_informacoes_carta_2, "CARTA 2 [%s] - %s: %f\n", codigo_carta_2, nome_cidade_2, super_poder_cidade_2);
             break;
         default:
-            printf("Opção inválida! Digite um dos números que estão disponíveis para escolha de um atributo.");
+            printf("Opção inválida! Digite um dos números que estão disponíveis para escolha do primeiro atributo.");
             break;
     }
+
+    // Menu de escolha do atributo 2
+    printf("\n\nMuito bem, agora escolha o segundo atributo que deseja para haver a comparação com o primeiro: \n");
+    printf("(Nas marcações no quadrado com X, seus número não podem ser mais usados). \n");
+    printf("----------------------------------------\n");
+    /*
+        Para fazer um menu dinâmico, é usado o Operador Ternário e a função
+        "strcmp" da biblioteca <string.h>, que serve para comparar o 
+        conteúdo de duas strings, onde se forem iguais, ele retorna o valor "0",
+        assim, usando o Operador Ternário, se voltar o valor "0", mostra que
+        já foi selecionado, senão, mostra como uma possível escolha, pois
+        esta função também traz se a primeira string é "menor", um valor menor que "0";
+        e se a primeira string é "maior", um valor maior que "0"
+    */
+    strcmp(atributo_selecionado1, "POPULAÇÃO") == 0 ? printf("[X] - POPULAÇÃO < (Primeiro Atributo selecionado)\n") : printf("[1] - POPULAÇÃO\n");
+
+    strcmp(atributo_selecionado1, "ÁREA") == 0 ? printf("[X] - ÁREA < (Primeiro Atributo selecionado)\n") : printf("[2] - ÁREA\n");
+
+    strcmp(atributo_selecionado1, "PIB") == 0 ? printf("[X] - PIB < (Primeiro Atributo selecionado)\n") : printf("[3] - PIB\n");
+
+    strcmp(atributo_selecionado1, "NÚMERO DE PONTOS TURÍSTICOS") == 0 ? printf("[X] - NÚMERO DE PONTOS TURÍSTICOS < (Primeiro Atributo selecionado)\n") : printf("[4] - NÚMERO DE PONTOS TURÍSTICOS\n");
+
+    strcmp(atributo_selecionado1, "DENSIDADE DEMOGRÁFICA") == 0 ? printf("[X] - DENSIDADE DEMOGRÁFICA < (Primeiro Atributo selecionado)\n") : printf("[5] - DENSIDADE DEMOGRÁFICA\n");
+
+    strcmp(atributo_selecionado1, "SUPER PODER") == 0 ? printf("[X] - SUPER PODER < (Primeiro Atributo selecionado)\n") : printf("[6] - SUPER PODER\n");
+
+    printf("----------------------------------------\n");
+    printf("[DIGITE O NÚMERO DO SEGUNDO ATRIBUTO QUE DESEJA] > ");
+    scanf("%d", &escolha2);
+
+    if (escolha1 == escolha2) {
+        printf("Escolha uma das opcões disponíveis no menu!\n");
+        return 0; // Parar o programa, e fazer com que não leve "lixo" para terminar o programa nas comparações
+    } else {
+        switch (escolha2)
+        {
+            // Caso escolha, e esteja disponível, POPULAÇÃO
+            case 1:
+                resultado2 = populacao_cidade_1 > populacao_cidade_2 ? 1 : 0;
+
+                // O método que vai mostrar para o usuário no final qual carta foi a vencedora neste segundo atributo
+                resultado2 == 1 ? strcpy(vencedor_atributo2, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo2, "Carta 2 venceu neste atributo!");
+
+                strcpy(atributo_selecionado2, "POPULAÇÃO");
+
+                sprintf(atributo_2_informacoes_carta_1, "CARTA 1 [%s] - %s: %u\n", codigo_carta_1, nome_cidade_1, populacao_cidade_1);
+                sprintf(atributo_2_informacoes_carta_2, "CARTA 2 [%s] - %s: %u\n", codigo_carta_2, nome_cidade_2, populacao_cidade_2);
+                break;
+            // Caso escolha ÁREA
+            case 2:
+                resultado2 = area_cidade_1 > area_cidade_2 ? 1 : 0;
+
+                resultado2 == 1 ? strcpy(vencedor_atributo2, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo2, "Carta 2 venceu neste atributo!");
+
+                strcpy(atributo_selecionado2, "ÁREA");
+
+                sprintf(atributo_2_informacoes_carta_1, "CARTA 1 [%s] - %s: %.2f KM²\n", codigo_carta_1, nome_cidade_1, area_cidade_1);
+                sprintf(atributo_2_informacoes_carta_2, "CARTA 2 [%s] - %s: %.2f KM²\n", codigo_carta_2, nome_cidade_2, area_cidade_2);
+                break;
+            // Caso escolha, e esteja disponível, PIB
+            case 3:
+                resultado2 = pib_cidade_1 > pib_cidade_2 ? 1 : 0;
+
+                resultado2 == 1 ? strcpy(vencedor_atributo2, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo2, "Carta 2 venceu neste atributo!");
+
+                strcpy(atributo_selecionado2, "PIB");
+
+                sprintf(atributo_2_informacoes_carta_1, "CARTA 1 [%s] - %s: %.2f BILHÕES DE REAIS\n", codigo_carta_1, nome_cidade_1, pib_cidade_1);
+                sprintf(atributo_2_informacoes_carta_2, "CARTA 2 [%s] - %s: %.2f BILHÕES DE REAIS\n", codigo_carta_2, nome_cidade_2, pib_cidade_2);
+                break;
+            // Caso escolha, e esteja disponível, NÚMERO DE PONTOS TURÍSTCOS
+            case 4:
+                resultado2 = pontos_turisticos_cidade_1 > pontos_turisticos_cidade_2 ? 1 : 0;
+
+                resultado2 == 1 ? strcpy(vencedor_atributo2, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo2, "Carta 2 venceu neste atributo!");
+
+                strcpy(atributo_selecionado2, "NÚMERO DE PONTOS TURÍSTCOS");
+
+                sprintf(atributo_2_informacoes_carta_1, "CARTA 1 [%s] - %s: %d\n", codigo_carta_1, nome_cidade_1, pontos_turisticos_cidade_1);
+                sprintf(atributo_2_informacoes_carta_2, "CARTA 2 [%s] - %s: %d\n", codigo_carta_2, nome_cidade_2, pontos_turisticos_cidade_2);
+                break;
+            // Caso escolha, e esteja disponível, DENSIDADE DEMOGRÁFICA
+            case 5:
+                resultado2 = densidade_populacional_cidade_1 < densidade_populacional_cidade_2 ? 1 : 0;
+
+                resultado2 == 1 ? strcpy(vencedor_atributo2, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo2, "Carta 2 venceu neste atributo!");
+
+                strcpy(atributo_selecionado2, "DENSIDADE DEMOGRÁFICA");
+
+                sprintf(atributo_2_informacoes_carta_1, "CARTA 1 [%s] - %s: %.2f HAB/KM²\n", codigo_carta_1, nome_cidade_1, densidade_populacional_cidade_1);
+                sprintf(atributo_2_informacoes_carta_2, "CARTA 2 [%s] - %s: %.2f HAB/KM²\n", codigo_carta_2, nome_cidade_2, densidade_populacional_cidade_2);
+                break;
+            // Caso escolha, e esteja disponível, SUPER PODER
+            case 6:
+                resultado2 = super_poder_cidade_1 > super_poder_cidade_2 ? 1 : 0;
+
+                resultado2 == 1 ? strcpy(vencedor_atributo2, "Carta 1 venceu neste atributo!") : strcpy(vencedor_atributo2, "Carta 2 venceu neste atributo!");
+
+                strcpy(atributo_selecionado2, "SUPER PODER");
+
+                sprintf(atributo_2_informacoes_carta_1, "CARTA 1 [%s] - %s: %f\n", codigo_carta_1, nome_cidade_1, super_poder_cidade_1);
+                sprintf(atributo_2_informacoes_carta_2, "CARTA 2 [%s] - %s: %f\n", codigo_carta_2, nome_cidade_2, super_poder_cidade_2);
+                break;
+            default:
+                printf("Opção inválida! Digite um dos números que estão disponíveis para escolha do segundo atributo.");
+                break;
+        }
+    }
+
+    /*
+        Definimos um vencedor comparando os atributos, e a cada vitória, é como se fosse um ponto.
+        Para ganhar, a carta tem que ganhar no primeiro e segundo atributo; para empate, a carta
+        tem que ganhar num dos atributos, sendo ou o primeiro ou o segundo, e perdendo no outro;
+        e por fim, para a derrota, a carta nao pode ganhar em nenhum dos dois atributos, tanto
+        o primeiro como o segundo.
+        Por isso usamos o if-else para fazer essas comparações com o resultado
+        da primeiro comparação do primeiro atributo, com o do segundo atributo.
+
+        E para vencer, a carta 1 precisa ganhar nos dois atributos.
+        Se cada carta ganhar um atributo, ocorre um empate.
+        Se a carta 2 ganhar os dois atributos, ela vence.
+
+        resultado = 1 significa vitória da carta 1 no atributo.
+        resultado = 0 significa vitória da carta 2 no atributo.
+    */
+    // Vitória da primeira carta
+    if (resultado1 && resultado2) {
+        strcpy(resultado_comparacao, "Parabéns, Carta 1! Você venceu!");
+    } else if (resultado1 != resultado2) {
+        strcpy(resultado_comparacao, "Que coisa! Houve um empate!");
+    }
+    // Vitória da segunda carta 
+    else {
+        strcpy(resultado_comparacao, "Parabéns, Carta 2! Você venceu!");
+    }
     
-    // Agora fomatando as variveis aqui dentro e mostrando as informações da primeira e segunda carta e o resultado da comparação para o usuário
-    printf("\n\n-----------------------------------------------\n");
-    printf("ATRIBUTO DE COMPARAÇÃO USADO: %s.\n", atributo_selecionado);
-    printf("-----------------------------------------------\n");
-    printf("%s", informacoes_carta_1);
-    printf("%s", informacoes_carta_2);
+    printf("\n\n--------------------------------------------------------------------\n");
+    printf("RESULTADO DAS COMPARAÇÕES!\n");
+    printf("--------------------------------------------------------------------\n\n");
+
+    // Agora fomatando as variveis aqui dentro e mostrando as informações da primeira e segunda carta e o resultado da comparação de cada atributo para o usuário
+    printf("--------------------------------------------------------------\n");
+    printf("PRIMEIRO ATRIBUTO DE COMPARAÇÃO USADO: %s.\n", atributo_selecionado1);
+    printf("--------------------------------------------------------------\n");
+    printf("%s", atributo_1_informacoes_carta_1);
+    printf("%s", atributo_1_informacoes_carta_2);
+    printf("#################**#################\n");
+    printf("VENCEDOR NESTE PRIMEIRO ATRIBUTO: %s\n", vencedor_atributo1);
+    printf("--------------------------------------------------------------\n\n");
+
+    printf("--------------------------------------------------------------\n");
+    printf("SEGUNDO ATRIBUTO DE COMPARAÇÃO USADO: %s.\n", atributo_selecionado2);
+    printf("--------------------------------------------------------------\n");
+    printf("%s", atributo_2_informacoes_carta_1);
+    printf("%s", atributo_2_informacoes_carta_2);
+    printf("#################**#################\n");
+    printf("VENCEDOR NESTE SEGUNDO ATRIBUTO: %s\n", vencedor_atributo2);
+    printf("--------------------------------------------------------------\n\n");
+
     printf("-----------------------------------------------\n");
     printf("RESULTADO: %s\n", resultado_comparacao);
-    printf("-----------------------------------------------\n\n");
+    printf("-----------------------------------------------\n");
 
     return 0;
 }
